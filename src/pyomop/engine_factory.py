@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.automap import automap_base
+import asyncpg
 
 class CdmEngineFactory(object):
 
@@ -78,17 +79,23 @@ class CdmEngineFactory(object):
             mysql_url = 'mysql://{}:{}@{}:{}/{}'
             mysql_url = mysql_url.format(self._user, self._pw, self._host, self._port, self._name)
             self._engine = create_async_engine(mysql_url, isolation_level="READ UNCOMMITTED")
+        # if self._db == 'pgsql':
+        #     # https://stackoverflow.com/questions/9298296/sqlalchemy-support-of-postgres-schemas
+        #     dbschema = '{},public'  # Searches left-to-right
+        #     dbschema = dbschema.format(self._schema)
+        #     pgsql_url = 'postgresql+psycopg2://{}:{}@{}:{}/{}'
+        #     pgsql_url = pgsql_url.format(self._user, self._pw,
+        #                                 self._host, self._port, self._name)
+        #     self._engine = create_async_engine(
+        #         pgsql_url,
+        #         connect_args={'options': '-csearch_path={}'.format(dbschema)})
         if self._db == 'pgsql':
             # https://stackoverflow.com/questions/9298296/sqlalchemy-support-of-postgres-schemas
             dbschema = '{},public'  # Searches left-to-right
             dbschema = dbschema.format(self._schema)
-            pgsql_url = 'postgresql+psycopg2://{}:{}@{}:{}/{}'
-            pgsql_url = pgsql_url.format(self._user, self._pw,
-                                        self._host, self._port, self._name)
-            self._engine = create_async_engine(
-                pgsql_url,
-                connect_args={'options': '-csearch_path={}'.format(dbschema)})
-        return self._engine
+            pgsql_url = f"postgresql+asyncpg://{self._user}:{self._pw}@{self._host}:{self._port}/{self._name}"
+            self._engine = create_async_engine(pgsql_url)
+            return self._engine
 
     @property
     def session(self):
