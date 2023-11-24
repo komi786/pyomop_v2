@@ -153,7 +153,7 @@ class CdmVocabulary(object):
                    df[col] = df[col].astype(str)
                    df[col] = df[col].fillna(0)
                elif df[col].dtype == 'O':  # 'O' represents object (string) dtype
-                    df[col] = df[col].fillna('').astype(str)
+                  df[col] = df[col].fillna('').astype(str)
                 df[col] = df[col].fillna(0)
 
            #     if 'date' in col:
