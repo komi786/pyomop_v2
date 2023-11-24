@@ -145,17 +145,17 @@ class CdmVocabulary(object):
             mapper = getattr(automap.classes, table)
             stmt = insert(mapper)
 
-            #Handle NaN values based on column data types
+            # Handle NaN values based on column data types
             for col in df.columns:
                 if 'date' in col:
                     df[col] = df[col].astype(str)
-                if 'reason' in col :
-                   df[col] = df[col].astype(str)
-                   df[col] = df[col].fillna(0)
-               elif df[col].dtype == 'O':  # 'O' represents object (string) dtype
-                  df[col] = df[col].fillna('').astype(str)
+                if 'reason' in col:
+                    df[col] = df[col].astype(str)
+                    df[col] = df[col].fillna(0)
+                elif df[col].dtype == 'O':  # 'O' represents object (string) dtype
+                    df[col] = df[col].fillna('').astype(str)
                 df[col] = df[col].fillna(0)
-
+                
            #     if 'date' in col:
             print(df.dtypes)
             for _, group in df.groupby(np.arange(df.shape[0], dtype=int) // chunk_size):
