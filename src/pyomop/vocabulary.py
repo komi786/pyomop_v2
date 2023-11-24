@@ -147,7 +147,7 @@ class CdmVocabulary(object):
 
             #Handle NaN values based on column data types
             for col in df.columns:
-                if 'date' in col
+                if 'date' in col:
                     df[col] = df[col].astype(str)
                 if 'reason' in col :
                    df[col] = df[col].astype(str)
