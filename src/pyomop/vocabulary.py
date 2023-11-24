@@ -149,7 +149,7 @@ class CdmVocabulary(object):
             for col in df.columns:
                 if 'date' in col:
                     df[col] = df[col].astype(str)
-                if 'reason' in col :
+                if 'invalid_reason' in col :
                    df[col] = df[col].astype(str)
                    df[col] = df[col].fillna(0)
                 elif df[col].dtype == 'O':  # 'O' represents object (string) dtype
